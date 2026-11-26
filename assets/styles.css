@@ -1,0 +1,30 @@
+.stApp {
+    background: linear-gradient(135deg, #f5f7ff 0%, #eef4ff 55%, #f8faff 100%);
+    color: #18233b;
+}
+.block-container { padding-top: 2rem; max-width: 1200px; }
+h1, h2, h3 { color: #172554; }
+[data-testid="stMetric"] {
+    background: rgba(255,255,255,.82);
+    border: 1px solid #dce5f5;
+    padding: 18px;
+    border-radius: 16px;
+    box-shadow: 0 5px 18px rgba(35,55,100,.06);
+}
+.stButton > button, .stDownloadButton > button {
+    border-radius: 10px;
+    border: 0;
+    font-weight: 600;
+}
+section[data-testid="stSidebar"] {
+    background: #101c38;
+}
+section[data-testid="stSidebar"] * { color: #f4f7ff !important; }
+.stTextArea textarea, .stTextInput input {
+    border-radius: 10px;
+}
+div[data-testid="stExpander"] {
+    border: 1px solid #dce5f5;
+    border-radius: 12px;
+    background: rgba(255,255,255,.7);
+}
