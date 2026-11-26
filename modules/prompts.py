@@ -1,30 +1,55 @@
-TASK_INSTRUCTIONS = {
-    "Summary": "Create a faithful summary. Include the central ideas, important facts and conclusions. Do not invent facts.",
-    "Study Notes": "Create well-organized study notes with headings, definitions, key concepts and bullet points.",
-    "Report": "Create a structured report with a title, introduction, main sections, findings and conclusion.",
-    "Question & Answer": "Create 8 useful questions and clear answers based only on the source.",
-    "Simplify Text": "Rewrite the source in plain language while preserving its meaning and important details.",
-    "Key Points": "Extract the most important points as concise, meaningful bullet points."
-}
+"""Prompt templates for the AI Content Transformation platform."""
 
-def build_prompt(source, task, length, tone):
-    instruction = TASK_INSTRUCTIONS.get(task, "Transform the source faithfully.")
-    return f"""You are a careful content transformation assistant.
-Task: {task}
-Instruction: {instruction}
-Detail level: {length}
-Writing style: {tone}
+def build_prompt(source, task, length="Medium", tone="Professional"):
+    if not source or not source.strip():
+        raise ValueError("Please provide some text to transform.")
 
-Rules:
-- Use only information supported by the source.
-- Do not fabricate statistics, quotations, references or facts.
-- If information is missing, say it is not specified in the source.
-- Use clear headings and readable formatting.
-- Preserve technical terms when necessary.
+    task = task.lower().strip()
+
+    instructions = {
+        "summary": """
+Create a clear and accurate summary of the given content.
+Include the main ideas, important facts and conclusions.
+Do not add information that is not present in the source.
+""",
+        "study notes": """
+Convert the given content into well-organized study notes.
+Use meaningful headings, subheadings and bullet points.
+Highlight important definitions, concepts and facts.
+""",
+        "simplify": """
+Rewrite the given content in simple English.
+Use easy vocabulary and short sentences.
+Explain difficult concepts clearly without changing their meaning.
+""",
+        "report": """
+Create a professional report based on the given content.
+Include an appropriate title, introduction, main discussion
+and conclusion. Use headings and organized paragraphs.
+"""
+    }
+
+    instruction = instructions.get(task)
+
+    if instruction is None:
+        raise ValueError(f"Unsupported AI task: {task}")
+
+    return f"""
+You are an expert AI content transformation assistant.
+
+TASK:
+{instruction}
+
+OUTPUT LENGTH: {length}
+WRITING TONE: {tone}
+
+IMPORTANT RULES:
+1. Preserve the original meaning.
+2. Do not invent facts or references.
+3. Use clear and readable formatting.
+4. Avoid unnecessary repetition.
+5. Respond only with the transformed content.
 
 SOURCE CONTENT:
-\"\"\"
-{source[:24000]}
-\"\"\"
-
-Create the requested output now."""
+{source}
+"""
