@@ -1,11 +1,47 @@
+"""Automated content transformation workflow."""
+
 from modules.ai_engine import transform_text
-from modules.quiz_generator import generate_quiz
+from modules.quiz_generator import generate_quiz, generate_qa
+
 
 def run_full_workflow(source, model="llama3.2"):
-    """Run a sequence of transformations on the same source material."""
-    return {
-        "Summary": transform_text(source, "Summary", "Medium", "Student-friendly", model),
-        "Study Notes": transform_text(source, "Study Notes", "Detailed", "Student-friendly", model),
-        "Question & Answer": transform_text(source, "Question & Answer", "Medium", "Clear and simple", model),
-        "Quiz": generate_quiz(source, 5, model)
-    }
+    """Generate summary, notes, Q&A and quiz from one source."""
+
+    if not source or not source.strip():
+        raise ValueError("Please provide content for the workflow.")
+
+    results = {}
+
+    # Step 1: Generate summary
+    results["summary"] = transform_text(
+        source=source,
+        task="summary",
+        length="Medium",
+        tone="Professional",
+        model=model
+    )
+
+    # Step 2: Generate study notes
+    results["study_notes"] = transform_text(
+        source=source,
+        task="study notes",
+        length="Detailed",
+        tone="Educational",
+        model=model
+    )
+
+    # Step 3: Generate questions and answers
+    results["qa"] = generate_qa(
+        source=source,
+        num_questions=5,
+        model=model
+    )
+
+    # Step 4: Generate quiz
+    results["quiz"] = generate_quiz(
+        source=source,
+        num_questions=5,
+        model=model
+    )
+
+    return results
